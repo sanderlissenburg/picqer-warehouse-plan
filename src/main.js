@@ -60,7 +60,7 @@ import { Application, Graphics, Container, Matrix } from 'pixi.js';
 
     function onDragStart()
     {
-        dragTarget.alpha = 0.5;
+        this.alpha = 0.5;
         dragTarget = this;
         app.stage.on('pointermove', onDragMove);
     }
