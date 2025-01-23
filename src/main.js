@@ -126,11 +126,12 @@ import { Application, Graphics, Container, Matrix } from 'pixi.js';
         drawGrid();
     });
 
+    let isCmdPressed = false;
     let isDragging = false;
     let lastPosition = { x: 0, y: 0 };
 
     app.canvas.addEventListener('pointerdown', (event) => {
-        if (event.button === 1) { // Middelste muisknop
+        if (event.button === 1 || (isCmdPressed && event.button === 0)) { // Middelste muisknop
             event.preventDefault(); // Voorkom het scroll-icoon
             isDragging = true;
             lastPosition = { x: event.clientX, y: event.clientY };
@@ -154,19 +155,27 @@ import { Application, Graphics, Container, Matrix } from 'pixi.js';
     });
 
     app.canvas.addEventListener('pointerup', (event) => {
-        if (event.button === 1) {
-            isDragging = false;
-            app.canvas.style.cursor = 'auto';
+        isDragging = false;
+        app.canvas.style.cursor = 'auto';
+    });
+
+    window.addEventListener('keydown', (event) => {
+        if (event.metaKey) {
+            isCmdPressed = true;
         }
     });
 
-   window.addEventListener('keyup', (event) => {
+    window.addEventListener('keyup', (event) => {
         if (event.code === 'KeyR') {
             scale = 1;
             translateX = 0;
             translateY = 0;
             workCanvas.setFromMatrix(new Matrix().scale(scale, scale).translate(translateX, translateY));
             drawGrid();
+        }
+
+        if (! event.metaKey) {
+            isCmdPressed = false;
         }
     });
 
